@@ -1,0 +1,46 @@
+.SectorPanel {
+    display: flex;
+    /* background: yellow; */
+    justify-content: center; 
+    align-items: center;
+    flex-direction: column;
+    color: #0e6955;
+}
+
+.SectorList {
+    display: flex;
+    margin: 8px;
+}
+
+.SectorItem {
+    /* background: green; */
+    margin: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.LinkButton {
+    border-radius: 25px;
+    color: white;
+    min-width: 170px;
+    height: 40px;
+    margin: 5px;
+
+}
+
+.roads {
+    background: #5c1a8e;
+    
+}
+
+.weather {
+    background: #4296df;
+    
+}
+
+.fire {
+    background: #ae1f15;
+    
+}

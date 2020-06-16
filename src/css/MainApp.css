@@ -1,0 +1,6 @@
+.MainApp {
+    color: #0e6955;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
