@@ -26,7 +26,27 @@ const GoogleMaps = (props) => {
 
     const googleMapRef = React.createRef();
     const googleMap = useRef(null);
+    let legendHTML = `
+    <div class='legend'>
+    <div class='legendRow'>
+    <div class='legendBox legendItemGreen'></div>
+    <span>0 Cases</span>
+    </div>
+    <div class='legendRow'>
+    <div class='legendBox legendItemYellow'></div>
+    <span>Up to 10 Cases</span>
+    </div>
+    <div class='legendRow'>
+    <div class='legendBox legendItemBlue'></div>
+    <span>11 to 20 Cases</span>
+    </div>
+    <div class='legendRow'>
+    <div class='legendBox legendItemRed'></div>
+    <span>More than 20 Cases</span>
+    </div>
+    </div>`
 
+   
     const createGoogleMap = () => {
 
         const map = new window.google.maps.Map(googleMapRef.current, {
@@ -110,10 +130,11 @@ const GoogleMaps = (props) => {
                 // map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(getLegend());
                 // console.log("Map Controls:", map.controls)
                 var covidLegendDiv = document.createElement('div');
-                covidLegendDiv.innerHTML = "<div id='legend'>Hello</div>"
+                covidLegendDiv.innerHTML = legendHTML
+                
                 // var covidLegendDiv = document.getElementById('legend').innerHTML = getLegend();
                 // var covidLegend = new CovidLegend(covidLegendDiv, map);
-                covidLegendDiv.index = 2;
+                // covidLegendDiv.index = 2;
                 
                 map.controls[window.google.maps.ControlPosition.TOP_RIGHT].push(covidLegendDiv);
 
@@ -174,13 +195,13 @@ const GoogleMaps = (props) => {
                 let numCases = feature.getProperty('Cases')
                 if (numCases > 0) {
 
-                    if (numCases < 9)
+                    if (numCases < 11)
                         return ({
                             fillColor: 'yellow'
 
                         });
                     else {
-                        if (numCases < 19)
+                        if (numCases < 21)
                             return ({
                                 fillColor: 'blue'
 

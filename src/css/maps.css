@@ -1,10 +1,52 @@
-#legend { 
-    display: flex; 
-    display: -webkit-box; 
+.legend { 
+    /* display: flex; 
+    flex-direction: column;
+    align-items: center; */
+    /* display: -webkit-box;  */
     padding-top: 7px;
-    background: greenyellow;
-    border: 5px solid red;
+    /* border: 5px solid red; */
     width: 150px;
+    height: 120px;
+    background: #fff;
+    margin: 10px;
+    border: 2px solid #fff;
+    box-shadow:  0px 2px 6px rgba(0,0,0,.3);
+    border-radius: 3px;
+    font-family: 'Roboto,Arial,sans-serif';
+    /* border: 2px solid #fff; */
+
+
+}
+
+.legendRow {
+    display : flex;
+    align-items : center;
+    margin-bottom: 5px;
+    justify-content: left;
+    margin-left: 5px;
+}
+
+.legendBox {
+  height: 20px;
+  width: 20px;
+  border: 1px solid black;
+  margin-right : 5px;
+}
+
+.legendItemYellow {
+    background-color: #f8f8ab;
+  }
+
+.legendItemRed {
+  background-color: #f2a39f;
+}
+
+.legendItemGreen {
+  background-color: #abd2ab;
+}
+
+.legendItemBlue {
+  background-color: #ababf8;
 }
 
 .color-key {
