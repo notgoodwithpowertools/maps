@@ -12,7 +12,7 @@
     border: 2px solid #fff;
     box-shadow:  0px 2px 6px rgba(0,0,0,.3);
     border-radius: 3px;
-    font-family: 'Roboto,Arial,sans-serif';
+    /* font-family: 'Lato,Roboto,Arial,sans-serif'; */
     /* border: 2px solid #fff; */
 
 
@@ -47,6 +47,25 @@
 
 .legendItemBlue {
   background-color: #ababf8;
+}
+
+/* .weather-desc {
+  margin: 0px;
+  padding: 0px;
+} */
+
+
+div.weather-desc > p, i {
+  margin: 0px;
+}
+
+h3, h5 {
+  margin-top: 7px;
+  margin-bottom: 0px;
+}
+
+i.weather-desc {
+  color: blue;
 }
 
 .color-key {

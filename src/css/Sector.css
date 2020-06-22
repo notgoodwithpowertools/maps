@@ -24,23 +24,38 @@
 .LinkButton {
     border-radius: 25px;
     color: white;
-    min-width: 170px;
+    min-width: 150px;
     height: 40px;
     margin: 5px;
-
+    outline: none;
+   
 }
 
 .roads {
     background: #5c1a8e;
+    border: 2px solid #5c1a8e;
     
 }
 
 .weather {
     background: #4296df;
+    border: 2px solid #4296df;
     
 }
 
 .fire {
     background: #ae1f15;
-    
+    border: 2px solid #ae1f15;   
+}
+
+.covid {
+    background: #333333;
+    border: 2px solid #333333;   
+}
+
+.otherSector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }

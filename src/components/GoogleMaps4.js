@@ -3,7 +3,6 @@ import React, { useEffect, useRef } from 'react';
 import '../css/maps.css'
 import Sev3Truck from '../images/truck-red-sm.png'
 
-import Image from './Image.jsx'
 // Variables
 const MAP_API_KEY = process.env.REACT_APP_MAPS_KEY;
 
@@ -23,40 +22,8 @@ const mapStyles = {
     height: '600px',
 };
 
-const getColor = (type) => {
-
-    switch (type) {
-        case 'Weather': {
-            return 'purple'
-        }
-        case 'Traffic': {
-            return 'blue'
-        }
-        case 'Covid': {
-            return 'yellow'
-        }
-        case 'Fire': {
-            return 'red'
-        }
-        default: {
-            return 'red'
-        }
-    }
-
-}
-
-const pinSymbol = (color) => {
-    return {
-        path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
-        fillColor: color,
-        fillOpacity: 1,
-        strokeColor: '#000',
-        strokeWeight: 2,
-        scale: 1,
-    };
-}
-
-
+// baseline the marker list 
+let markers = []
 
 const GoogleMaps = (props) => {
 
@@ -99,17 +66,19 @@ const GoogleMaps = (props) => {
         var covidControl = new CovidControl(covidControlDiv, map);
         covidControlDiv.index = 1;
         map.controls[window.google.maps.ControlPosition.TOP_LEFT].push(covidControlDiv);
-        // getLegend()
+       
         // map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('legend'));
 
         // Add a listener for the click event
         window.google.maps.event.addListener(map, "rightclick", function (event) {
+            
             console.log("Double Click");
             let latitude = event.latLng.lat();
             let longitude = event.latLng.lng();
             console.log(latitude + ', ' + longitude)
             getWeatherAtLocation(latitude, longitude, event, map)
-        });
+
+        })
 
         window.google.maps.event.addListener(map, 'click', function (event) {
 
@@ -179,33 +148,42 @@ const GoogleMaps = (props) => {
 
             }
             else {
+
                 removeCovidLayer(active, googleMap.current)
                 map.controls[window.google.maps.ControlPosition.LEFT_CENTER].clear();
-            }
 
+            }
 
         });
 
     }
 
-    const processEvents = () => {
-        console.log("Process events ... ", events)
 
-        let markers = []
+    function setMapOnAll() {
+        console.log("SetMapOnall...", markers.length)
+        for (var i = 0; i < markers.length; i++) {
+          console.log(")iiii_ ..SetMapOnall...")
+          markers[i].setMap(null);
+          markers[i] = null;
+        }
+      }
+
+
+    const processEvents = (map) => {
+        console.log("Process events ... ", events + " markers:", markers)
+
+        setMapOnAll() // clear from markers list
+        markers = []  // reset markers
 
         events.forEach((event, index) => {
             console.log("eventMarker:", event)
 
-            markers[index] = createMarker(event)
+            markers.push(createMarker(event)) // build again
+           
         })
+
+        console.log("Markers:", markers)
     }
-
-
-    function myAction() {
-        console.log("MyAction")
-    }
-
-
 
     const createMarker = (event) => {
         const marker = new window.google.maps.Marker({
@@ -225,17 +203,11 @@ const GoogleMaps = (props) => {
         // function myAction(event) { console.log("hello...") }
         // window.google.maps.event.addDomListener(input, "click", () => {
 
-            
-
-
-        // });
-
         let infoHTML =
             `<p>${event.text}</p>`
              
             //  <input type='button' name='Delete' value='Delete' onClick='() => {console.log("MyAction")}'/>`
 
-        
         const infowindow = createInfoWindow(infoHTML)
         marker.addListener('click', function () {
             infowindow.open(googleMap.current, marker);
@@ -262,11 +234,9 @@ const GoogleMaps = (props) => {
                 createTrafficLayer().setMap(googleMap.current)
                 createTransitLayer().setMap(googleMap.current)
 
-                // createCovidLayer(googleMap.current)
-
             })
         }
-        processEvents(events)
+        processEvents(events, googleMap.current)
 
     }, [events])
 

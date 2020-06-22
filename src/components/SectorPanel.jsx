@@ -14,6 +14,8 @@ import NTImage from '../images/states/northern-territory-green.png'
 
 const SectorPanel = () => {
 
+    let covidLink = 'https://www.theage.com.au/national/covid-19-data-centre-coronavirus-by-the-numbers-20200401-p54g4w.html?permanent_redirect=true'
+
     let states = [
         {
             name: 'Victoria',
@@ -77,13 +79,12 @@ const SectorPanel = () => {
             bomLink: 'http://www.bom.gov.au/nt/?ref=hdr',
             fireLink: 'https://www.pfes.nt.gov.au/incidentmap/'
 
-        },
-
+        }
     ]
 
     const getSectors = () => {
 
-        console.log("States:", states)
+        // console.log("States:", states)
 
         return states.map((state, index) => {
 
@@ -97,11 +98,23 @@ const SectorPanel = () => {
 
     }
 
+    const OtherSector = () => {
+        return (
+            <div className='otherSector'>
+                <p>Other Resources</p>
+                <a href={covidLink}
+                    // eslint-disable-next-line
+                    target="_blank"><button className='LinkButton covid'>COVID 19 Data</button>
+                </a>
+            </div>
+        )
+    }
+
     return (
         <div className='SectorPanel'>
             <h1>Agency Links</h1>
             <div className='SectorList'>
-            {getSectors()}
+                {getSectors()}<OtherSector />
             </div>
         </div>
     )

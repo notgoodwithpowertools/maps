@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import '../css/maps.css'
 import Sev3Truck from '../images/truck-red-sm.png'
 
-import Image from './Image.jsx'
 // Variables
 const MAP_API_KEY = process.env.REACT_APP_MAPS_KEY;
 
@@ -23,42 +22,13 @@ const mapStyles = {
     height: '600px',
 };
 
-const getColor = (type) => {
-
-    switch (type) {
-        case 'Weather': {
-            return 'purple'
-        }
-        case 'Traffic': {
-            return 'blue'
-        }
-        case 'Covid': {
-            return 'yellow'
-        }
-        case 'Fire': {
-            return 'red'
-        }
-        default: {
-            return 'red'
-        }
-    }
-
-}
-
-const pinSymbol = (color) => {
-    return {
-        path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
-        fillColor: color,
-        fillOpacity: 1,
-        strokeColor: '#000',
-        strokeWeight: 2,
-        scale: 1,
-    };
-}
-
+let markers = []
 
 
 const GoogleMaps = (props) => {
+
+    // baseline the marker list 
+
 
     const { events, setEventLoc } = props
 
@@ -85,7 +55,9 @@ const GoogleMaps = (props) => {
     </div>`
 
 
-    const createGoogleMap = () => {
+    const createGoogleMap = ( ) => {
+
+        // const { events } = props
 
         const map = new window.google.maps.Map(googleMapRef.current, {
             zoom: 8,
@@ -99,17 +71,25 @@ const GoogleMaps = (props) => {
         var covidControl = new CovidControl(covidControlDiv, map);
         covidControlDiv.index = 1;
         map.controls[window.google.maps.ControlPosition.TOP_LEFT].push(covidControlDiv);
-        // getLegend()
+
+        // -->
+        var busEvControlDiv = document.createElement('div');
+        var busEvControl = new BusEvControl(busEvControlDiv, map, events, markers);
+        busEvControlDiv.index = 2;
+        map.controls[window.google.maps.ControlPosition.TOP_LEFT].push(busEvControlDiv);
+       
         // map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('legend'));
 
         // Add a listener for the click event
         window.google.maps.event.addListener(map, "rightclick", function (event) {
+            
             console.log("Double Click");
             let latitude = event.latLng.lat();
             let longitude = event.latLng.lng();
             console.log(latitude + ', ' + longitude)
             getWeatherAtLocation(latitude, longitude, event, map)
-        });
+
+        })
 
         window.google.maps.event.addListener(map, 'click', function (event) {
 
@@ -124,6 +104,78 @@ const GoogleMaps = (props) => {
         return map
 
     }
+    // -->
+
+    function BusEvControl(controlDiv, map, events, markers) {
+
+        let active = true
+
+        // Set CSS for the control border.
+        var controlUI = document.createElement('div');
+        controlUI.style.backgroundColor = '#fff';
+        controlUI.style.border = '2px solid #fff';
+        controlUI.style.borderRadius = '3px';
+        controlUI.style.boxShadow = '0 2px 2px rgba(0,0,0,.1)';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginBottom = '22px';
+        controlUI.style.textAlign = 'center';
+        controlUI.style.marginTop = '10px';
+        controlUI.style.marginLeft = '10px';
+        controlUI.title = 'Bus Control UI';
+        controlDiv.appendChild(controlUI);
+
+        // Set CSS for the control interior.
+        var controlText = document.createElement('div');
+        // controlText.style.color = 'rgb(25,25,25)';
+        controlText.style.color = '#347869';
+        controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+        controlText.style.fontWeight = '480';
+        controlText.style.fontSize = '18px';
+        controlText.style.lineHeight = '38px';
+        controlText.style.paddingLeft = '5px';
+        controlText.style.paddingRight = '5px';
+        controlText.textContent = 'Bus Ev';
+        controlUI.appendChild(controlText);
+
+        // Setup the click event listeners
+        controlUI.addEventListener('click', function () {
+
+            console.log("Clicked ++ ...")
+            active ? active = false : active = true
+
+            active ? controlText.style.color = '#347869' : controlText.style.color = 'grey'
+            console.log("Business layer active state is being set to:", active)
+            if (active) {
+
+                
+                console.log("Active Markers:", markers)
+                console.log("Event Markers:", events)
+                processEvents(map)
+                // setShow(true)
+
+                // setMapOnAll(map)
+            //     createCovidLayer(active, googleMap.current)
+                
+            //     var covidLegendDiv = document.createElement('div');
+            //     covidLegendDiv.innerHTML = legendHTML
+
+            //     map.controls[window.google.maps.ControlPosition.LEFT_CENTER].push(covidLegendDiv);
+
+            }
+            else {
+
+                setMapOnAll(null)
+            //     removeCovidLayer(active, googleMap.current)
+            //     map.controls[window.google.maps.ControlPosition.LEFT_CENTER].clear();
+
+            }
+
+        });
+
+    }
+
+
+    // --> 
 
     function CovidControl(controlDiv, map) {
 
@@ -144,7 +196,8 @@ const GoogleMaps = (props) => {
 
         // Set CSS for the control interior.
         var controlText = document.createElement('div');
-        controlText.style.color = 'rgb(25,25,25)';
+        // controlText.style.color = 'rgb(25,25,25)';
+        controlText.style.color = 'grey';
         controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
         controlText.style.fontWeight = '480';
         controlText.style.fontSize = '18px';
@@ -179,33 +232,43 @@ const GoogleMaps = (props) => {
 
             }
             else {
+
                 removeCovidLayer(active, googleMap.current)
                 map.controls[window.google.maps.ControlPosition.LEFT_CENTER].clear();
-            }
 
+            }
 
         });
 
     }
 
-    const processEvents = () => {
-        console.log("Process events ... ", events)
 
-        let markers = []
+    const setMapOnAll = (map) => {
+        console.log("SetMapOnall...", markers.length)
+        for (var i = 0; i < markers.length; i++) {
+          console.log(")iiii_ ..SetMapOnall...")
+          markers[i].setMap(map);
+          markers[i] = map;
+        }
+      }
+
+
+    const processEvents = () => {
+        console.log("Process events ... ", events + " markers:", markers)
+        if (markers[0]!== null) {        
+            setMapOnAll(null) // clear from markers list
+        }
+        markers = []  // reset markers
 
         events.forEach((event, index) => {
             console.log("eventMarker:", event)
 
-            markers[index] = createMarker(event)
+            markers.push(createMarker(event)) // build again
+           
         })
+
+        console.log("Markers:", markers)
     }
-
-
-    function myAction() {
-        console.log("MyAction")
-    }
-
-
 
     const createMarker = (event) => {
         const marker = new window.google.maps.Marker({
@@ -225,17 +288,11 @@ const GoogleMaps = (props) => {
         // function myAction(event) { console.log("hello...") }
         // window.google.maps.event.addDomListener(input, "click", () => {
 
-            
-
-
-        // });
-
         let infoHTML =
             `<p>${event.text}</p>`
              
             //  <input type='button' name='Delete' value='Delete' onClick='() => {console.log("MyAction")}'/>`
 
-        
         const infowindow = createInfoWindow(infoHTML)
         marker.addListener('click', function () {
             infowindow.open(googleMap.current, marker);
@@ -257,16 +314,14 @@ const GoogleMaps = (props) => {
             window.document.body.appendChild(googleMapScript);
 
             googleMapScript.addEventListener('load', () => {
-                googleMap.current = createGoogleMap();
+                googleMap.current = createGoogleMap(events);
 
                 createTrafficLayer().setMap(googleMap.current)
                 createTransitLayer().setMap(googleMap.current)
 
-                // createCovidLayer(googleMap.current)
-
             })
         }
-        processEvents(events)
+        processEvents(googleMap.current)
 
     }, [events])
 

@@ -1,0 +1,99 @@
+
+.matInput { /* Item area styles */
+  display: flex;
+  min-height: 70px;
+  justify-content: flex-end;
+  align-items: left;
+  flex-direction: column;
+  margin: 10px;
+  padding: 3px;
+  padding-bottom: 0px;
+  /* border: 2px solid red; */
+  --bg-color: none;
+  --valid-txt-color: green; 
+  --invalid-txt-color: red; 
+  --focus-txt-color: purple;
+  --hlight-txt-color: blue;
+  background-color: var(--bg-color);
+  /* background-color: salmon; */
+  text-align: left;
+}
+
+input.mat { /* control styles */
+/*   background: var(--bg-color); *//* match background */
+  /* background: yellow; */
+  color: var(--valid-txt-color);
+  font-size: medium;
+  padding: 5px;/* 10px 10px 10px; */
+  width: 320px;
+  border: none;
+  outline: none; 
+  /* border-radius: 0; */ /* remove border */
+  border-bottom: 3px solid orange;
+  transition: 600ms ease all;
+}
+
+label.mat {
+  color: var(--valid-txt-color);
+  font-size: medium;
+  font-weight: normal;
+  position: relative;
+  pointer-events: none;
+  left: 5px;
+  top: -25px;
+  /* display: none; */
+  transition: 600ms ease all;
+} 
+
+input.mat:required + label.mat { /* indicate a 'required' value with red label */
+  color: var(--invalid-txt-color);
+}
+
+/* input[type=date] + label.mat {
+
+} */
+
+input.mat:focus { /* styles while editing */
+  color: var(--focus-txt-color);
+  border-bottom: 3px solid yellow;
+}
+
+input.mat:focus + label.mat, input[type=date] + label.mat { /* move label position out of input if it is focussed*/ /* or if it is type date */
+  color: var(--hlight-txt-color);
+  left: 0px;
+  top: -50px;
+  font-size: small;
+}  
+
+input.mat:required + label.mat::after /* add 'required' indicator */, input.mat[required~="true"] + label.mat::after { /* add 'required' indicator */
+  content: "*"; 
+  color: var(--invalid-txt-color);
+}
+
+input.mat:valid:not([value=""]) + label.mat{ /* keep label position out of input if there is a value */
+  color: var(--hlight-txt-color);
+  left: 0px;
+  top: -50px;
+  font-size: small;
+}  
+
+input.mat:valid:not([value=""]) { /* use green bottom border to indicate valid input value */
+  border-bottom: 3px solid var(--valid-txt-color);
+  /* background: grey; */
+} 
+
+input.mat[value]:not([value=""]):invalid + label.mat {  /* keep label position out of input if there is a value */
+  color: var(--invalid-txt-color);
+  left: 0px;
+  top: -50px;
+  font-size: small;
+}
+
+input.mat:invalid {  /* input is invalid */
+  box-shadow: none; /* remove border highlight when invalid */
+  color: var(--invalid-txt-color); /* text is red */
+}
+
+@media (max-width: 800px) { 
+
+}
