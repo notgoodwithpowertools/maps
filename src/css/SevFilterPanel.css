@@ -1,0 +1,24 @@
+.SevFilterPanel {
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    color: #347869;
+    margin: 0;
+    padding: 10px;
+    /* background: lightblue; */
+    /* height: 150px; */
+    /* justify-content: flex-start; */
+}
+
+/* .SevFilterPanel > p, h3 { */
+    /* margin: 5px; */
+    /* padding: 0; */
+/* } */
+
+.SevFilterOptions {
+    display: flex;
+    /* background: grey; */
+    padding: 10px;
+    /* margin: 10px; */
+
+}

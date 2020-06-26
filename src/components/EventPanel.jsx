@@ -12,12 +12,14 @@ const EventPanel = ( props ) => {
 
     const { eventLoc, setEventLoc } = props
     const [evComments, setEvComments] = useState('')
+    const [sev, setSev] = useState(1)
 
     // console.log("EventLoc:", eventLoc)
 
     const reset = () => {
         setEvComments('')
         setEventLoc([])
+        setSev(1)
     }
 
     const disableButton = () => {
@@ -32,7 +34,7 @@ const EventPanel = ( props ) => {
 
         console.log(`Add Event ...sev 1, Comment:${evComments}, Lat:${eventLoc[0]}, Lng:${eventLoc[1]}`)
 
-        addEvent(1, evComments, eventLoc[0], eventLoc[1])
+        addEvent(sev, evComments, eventLoc[0], eventLoc[1])
         reset()
 
     }
@@ -43,7 +45,7 @@ const EventPanel = ( props ) => {
             
             <p>Click map to add event location...</p>
             <p>{eventLoc[0]} , {eventLoc[1]}</p>
-            <SevPanel />
+            <SevPanel setSev={setSev} sev={sev}/>
             <MatInput type={"textarea"} label={"Comments"} required value={evComments} onChange={setEvComments} />  
             <MatButton text='Add!' onClick={buttonAction} disabled={disableButton()}/>
         </div>

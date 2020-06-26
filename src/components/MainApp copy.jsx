@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { firestoreDB } from '../utils/firebase.js'
-// import { filterEvents2 } from '../utils/events.js'
+import { filterEvents2 } from '../utils/events.js'
 
 import SevFilterPanel from './SevFilterPanel.jsx'
 import SectorPanel from './SectorPanel.jsx'
@@ -18,10 +18,10 @@ const MainApp = () => {
     const [events, setEvents] = useState([])
     const [filteredEvents, setFilteredEvents] = useState([])
 
-    const filterEvents = () => {
+    const filterEvents = (parsed_events) => {
 
-        console.log("filterEvents...eventLevel:", eventLevel + ' events:', events)
-        let myEvents = events.filter((event) => {
+        console.log("filterEvents...eventLevel:", eventLevel + ' events:', parsed_events)
+        let myEvents = parsed_events.filter((event) => {
 
             console.log("filtering", event.sev)
             return (event.sev <= eventLevel)
@@ -31,7 +31,7 @@ const MainApp = () => {
         setFilteredEvents(myEvents)
     }
 
-    useEffect(() => { // get map event documents for the selected path/category
+    useEffect(() => { // get map evebnt documents for the selected path/category
 
         console.log("MainApp useEffect (1) ...")
 
@@ -54,6 +54,7 @@ const MainApp = () => {
             console.log('parsedItems:', parsedItems)
             setEvents(parsedItems)
             // setFilteredEvents(parsedItems)
+            filterEvents(parsedItems)
 
         })
         return () => {
@@ -71,8 +72,13 @@ const MainApp = () => {
         console.log("MainApp useEffect (2)...")
         console.log("eventLevel changed to ... ", eventLevel)
         filterEvents(events)
+        console.log("eventLevel changed to ... ", eventLevel)
 
-    }, [events, eventLevel])
+    }, [eventLevel])
+
+    const showFilteredEvents = () => {
+        console.log("showFilteredEvents ...", filteredEvents)
+    }
 
     return (
 

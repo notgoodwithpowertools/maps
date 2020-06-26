@@ -5,5 +5,8 @@
 .SevPanelImages {
     display: flex;
     justify-content: space-evenly;
+}
+
+.SevImageSelected {
     border-bottom: 4px solid #347869;
 }
